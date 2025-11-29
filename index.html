@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>イベント参加登録システム</title>
+    <style>
+        :root {
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+            --color-red-500-rgb: 192, 21, 47;
+            --color-red-400-rgb: 255, 84, 89;
+            --color-orange-500-rgb: 168, 75, 47;
+            --color-bg-1: rgba(59, 130, 246, 0.08);
+            --color-bg-2: rgba(245, 158, 11, 0.08);
+            --color-bg-3: rgba(34, 197, 94, 0.08);
+            --color-bg-4: rgba(239, 68, 68, 0.08);
+            --color-bg-5: rgba(147, 51, 234, 0.08);
+            --color-bg-6: rgba(249, 115, 22, 0.08);
+            --color-bg-7: rgba(236, 72, 153, 0.08);
+            --color-bg-8: rgba(6, 182, 212, 0.08);
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-error: var(--color-red-500);
+            --color-success: var(--color-teal-500);
+            --color-warning: var(--color-orange-500);
+            --color-info: var(--color-slate-500);
+            --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+
+            --focus-ring: 0 0 0 3px var(--color-focus-ring);
+            --focus-outline: 2px solid var(--color-primary);
+
+            --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+                BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-size-base: 16px;
+            --font-size-lg: 20px;
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+                0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            --space-16: 16px;
+            --space-24: 24px;
+            --space-8: 8px;
+        }
+        body {
+            font-family: var(--font-family-base);
+            background: var(--color-background);
+            color: var(--color-text);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 480px;
+            margin: 32px auto;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 40px 24px 32px 24px;
+        }
+        h1 {
+            font-size: 1.7rem;
+            margin-top: 0;
+            letter-spacing: .03em;
+        }
+        .form-group {
+            margin-bottom: var(--space-16);
+        }
+        .form-label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: .97em;
+            font-weight: 600;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: var(--radius-base);
+            border: 1px solid var(--color-border);
+            font-size: 1em;
+            margin-bottom: 6px;
+        }
+        .form-control:focus {
+            outline: var(--focus-outline);
+            border-color: var(--color-primary);
+        }
+        .btn {
+            padding: 12px 0;
+            width: 100%;
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: 1em;
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background .2s;
+        }
+        .btn:hover,
+        .btn:active {
+            background: var(--color-primary-hover);
+        }
+        .center {
+            text-align: center;
+        }
+        .mt24 { margin-top: 24px; }
+        .qr-section {
+            margin: var(--space-24) 0 var(--space-16) 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .qr-section img {
+            background: var(--color-white);
+            padding: 10px;
+            border-radius: var(--radius-base);
+            box-shadow: var(--shadow-lg);
+        }
+        .hint {
+            color: var(--color-text-secondary);
+            font-size: .88em;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+        .input-code {
+            display: flex;
+            gap: 6px;
+            margin-top: var(--space-16);
+            justify-content: center;
+        }
+        .input-code input {
+            width: 38px;
+            height: 38px;
+            text-align: center;
+            font-size: 1.4em;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+        }
+        .code-success {
+            color: var(--color-success);
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-top: var(--space-16);
+        }
+        .wait-msg {
+            color: var(--color-info);
+            font-size: 1.06em;
+        }
+        .admin-login-btn {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background: var(--color-secondary);
+            border: none;
+            color: var(--color-text);
+            padding: 10px 18px;
+            font-size: 1em;
+            border-radius: var(--radius-base);
+            z-index: 20;
+            cursor: pointer;
+        }
+        .admin-login-btn:hover { background: var(--color-secondary-hover); }
+        .modal.hidden { display: none; }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 99;
+        }
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.45);
+            z-index: 1;
+        }
+        .modal-content {
+            z-index: 2;
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 38px 32px 32px 32px;
+            max-width: 380px;
+            width: 95vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modal-content h2 {
+            margin-bottom: 19px;
+            text-align: center;
+        }
+        .modal-content input[type="password"] {
+            width: 95%;
+            padding: 13px 11px;
+            margin-bottom: 18px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            font-size: 1.1em;
+        }
+        .modal-content input[type="password"]:focus {
+            border-color: var(--color-primary);
+            outline: var(--focus-outline);
+        }
+        .error-message {
+            color: var(--color-error);
+            margin-bottom: 14px;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+        }
+        .modal-buttons button { flex: 1; }
+        /* Admin: QR Scanning */
+        .video-preview {
+            width: 100%;
+            max-width: 380px;
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-16);
+            background: var(--color-bg-1);
+        }
+        .code-area {
+            margin-bottom: 20px;
+        }
+        .copied-confirm {
+            color: var(--color-success);
+            margin-left: 7px;
+            font-size: .96em;
+        }
+        .scan-success {
+            color: var(--color-success);
+            margin: 14px 0 6px 0;
+            font-size: 1.08em;
+        }
+        .scan-error {
+            color: var(--color-error);
+            margin: 14px 0 6px 0;
+            font-size: 1.08em;
+        }
+        .logout-btn {
+            position: fixed;
+            top: 18px;
+            right: 22px;
+            background: var(--color-warning);
+            color: var(--color-white);
+            padding: 7px 18px;
+            border-radius: 6px;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            z-index: 199;
+        }
+        @media (max-width: 650px) {
+            .container { padding: 18px 3vw 22px 3vw;}
+        }
+    </style>
+</head>
+<body>
+    <div id="main">
+        <div class="container" id="registerContainer">
+            <h1>イベント参加登録</h1>
+            <form id="registerForm" autocomplete="off">
+                <div class="form-group">
+                    <label class="form-label" for="name">参加者名</label>
+                    <input class="form-control" type="text" id="name" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">メールアドレス</label>
+                    <input class="form-control" type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="grade">学年</label>
+                    <select class="form-control" id="grade" required>
+                        <option value="">選択してください</option>
+                        <option value="1年">1年</option>
+                        <option value="2年">2年</option>
+                        <option value="3年">3年</option>
+                        <option value="4年">4年</option>
+                        <option value="その他">その他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="notes">備考（任意）</label>
+                    <textarea class="form-control" id="notes" rows="2"></textarea>
+                </div>
+                <button class="btn" type="submit" id="submitRegister">送信</button>
+            </form>
+            <div id="registerStatus" class="center"></div>
+        </div>
+
+        <!-- Participant QR/entry section (after registration or returning) -->
+        <div class="container" id="participantStatusContainer" style="display: none;">
+            <h1>登録内容・QRコード</h1>
+            <div id="participantStatusMain"></div>
+            <div class="center">
+                <button class="btn" id="doNewRegister" style="margin-top:28px;">新しい登録</button>
+            </div>
+        </div>
+
+        <!-- 管理者ログインモーダル -->
+        <div id="adminLoginModal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <h2>管理者ログイン</h2>
+                <input type="password" id="adminPassword" placeholder="パスワードを入力">
+                <div id="loginError" class="error-message hidden"></div>
+                <div class="modal-buttons">
+                    <button id="adminLoginSubmit" class="btn btn--primary">ログイン</button>
+                    <button id="adminLoginCancel" class="btn btn--secondary">キャンセル</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 管理者ダッシュボード -->
+        <div class="container" id="adminSection" style="display:none;">
+            <h1>管理者モード：スキャン</h1>
+            <button class="logout-btn" id="logoutAdmin">ログアウト</button>
+            <div style="margin:10px 0 18px 0;">
+                <button class="btn" id="startCameraScan">カメラを起動</button>
+            </div>
+            <video id="qrVideo" class="video-preview" style="display:none;" autoplay muted playsinline></video>
+            <div id="scanStatus"></div>
+            <div id="adminResult"></div>
+        </div>
+
+        <button id="adminLoginBtn" class="admin-login-btn">🔐 管理者ログイン</button>
+    </div>
+    <!-- jsQR library (for camera QR scan) -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <script>
+    // --- Configuration ---
+    const ADMIN_PASSWORD = "admin2024";
+    let adminLoggedIn = false;
+    let camStream = null;
+    let pollingInterval = null;
+    let webAppUrl = ''; // User sets up
+
+    // Load last-known participantId from localStorage to keep confirmation code polling after reload!
+    function loadSavedParticipantData() {
+        try {
+            const data = JSON.parse(localStorage.getItem("event_participant_data"));
+            if (!data) return null;
+            return data;
+        } catch (e) { return null;}
+    }
+    function saveParticipantData(data) {
+        localStorage.setItem("event_participant_data", JSON.stringify(data));
+    }
+    function clearParticipantData() {
+        localStorage.removeItem("event_participant_data");
+    }
+
+    // Main setup
+    window.addEventListener("DOMContentLoaded", () => {
+        webAppUrl = prompt("Google Sheets Web AppのURLを入力してください（後で変更可能）", "") || "";
+        setupParticipantHandlers();
+        setupAdminHandlers();
+
+        // 復帰: 途中保存を発見したら自動でその画面を表示
+        const saved = loadSavedParticipantData();
+        if (saved && saved.participantId) {
+            document.getElementById("registerContainer").style.display = "none";
+            showParticipantStatus(saved.participantId, saved.email, saved.name, saved.grade, saved.notes);
+        }
+    });
+
+    function setupParticipantHandlers() {
+        const form = document.getElementById("registerForm");
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            document.getElementById("registerStatus").textContent = "";
+            // フォーム情報取得
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const grade = document.getElementById("grade").value;
+            const notes = document.getElementById("notes").value.trim();
+            if (!name || !email || !grade) {
+                document.getElementById("registerStatus").textContent = "全ての必須項目を入力してください。";
+                return;
+            }
+            // Google Sheets Script へ登録
+            document.getElementById("submitRegister").disabled = true;
+            document.getElementById("registerStatus").textContent = "登録処理中...";
+            try {
+                const resp = await fetch(webAppUrl, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        action: "registerParticipant",
+                        name, email, grade, notes
+                    })
+                });
+                const data = await resp.json();
+                if (data.success && data.participantId) {
+                    // 保存して次の画面に
+                    saveParticipantData({participantId: data.participantId, email, name, grade, notes});
+                    document.getElementById("registerContainer").style.display = "none";
+                    showParticipantStatus(data.participantId, email, name, grade, notes);
+                } else {
+                    document.getElementById("registerStatus").textContent = "登録に失敗しました。";
+                }
+            } catch(e){
+                document.getElementById("registerStatus").textContent = "通信エラーが発生しました。";
+            }
+            document.getElementById("submitRegister").disabled = false;
+        });
+
+        document.getElementById("doNewRegister").addEventListener("click", () => {
+            clearParticipantData();
+            stopPolling();
+            document.getElementById("participantStatusContainer").style.display = "none";
+            document.getElementById("registerContainer").style.display = "";
+            form.reset();
+            document.getElementById("registerStatus").textContent = "";
+        });
+    }
+
+    // 参加者: 状態表示（QR, 確認コード, ポーリング）
+    function showParticipantStatus(participantId, email, name, grade, notes) {
+        const container = document.getElementById("participantStatusMain");
+        document.getElementById("registerContainer").style.display = "none";
+        document.getElementById("participantStatusContainer").style.display = "";
+        // QRコード生成
+        let qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + encodeURIComponent(participantId);
+        container.innerHTML = `
+            <div class="center"><strong>参加者ID：</strong> ${participantId}</div>
+            <div class="qr-section"><img src="${qrUrl}" alt="QRコード"></div>
+            <div class="center hint">このQRコードを管理者に提示してください</div>
+            <div style="margin-top:18px;font-weight:500;">確認コードを入力：</div>
+            <div class="input-code">
+                <input type="text" maxlength="4" pattern="[0-9]*" autocomplete="off" id="participantConfirmCode">
+            </div>
+            <div id="codeStatusArea" class="center mt24 wait-msg">管理者がスキャンするのをお待ちください...</div>
+        `;
+        // 入力欄活性
+        const codeInput = document.getElementById("participantConfirmCode");
+        codeInput.addEventListener("input", () => {
+            // コードチェック
+            if ((codeInput.value + "").length == 4 && /^[0-9]{4}$/.test(codeInput.value)) {
+                // サーバー側でもう一度確認
+                checkConfirmationCodeStatus(participantId, codeInput.value);
+            }
+        });
+        startPolling(participantId);
+    }
+
+    // ポーリング（リアルタイム自動更新）
+    function startPolling(participantId) {
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = setInterval(() => {
+            fetch(webAppUrl + `?action=checkConfirmationCode&participantId=` + encodeURIComponent(participantId))
+            .then(resp => resp.json())
+            .then(data => {
+                if (data.success && data.status === "scanned") {
+                    document.getElementById("codeStatusArea").textContent = "✅ 入場可能です！";
+                    document.getElementById("codeStatusArea").classList.add("code-success");
+                    document.getElementById("participantConfirmCode").disabled = true;
+                    clearInterval(pollingInterval);
+                }
+            });
+        }, 2000);
+    }
+    function stopPolling() {
+        if (pollingInterval) clearInterval(pollingInterval);
+        pollingInterval = null;
+    }
+    async function checkConfirmationCodeStatus(participantId, code) {
+        // サーバーから取得・照合
+        try {
+            const resp = await fetch(webAppUrl + `?action=checkConfirmationCode&participantId=` + encodeURIComponent(participantId));
+            const data = await resp.json();
+            if (data.success && data.confirmationCode === code && data.status === "scanned") {
+                document.getElementById("codeStatusArea").textContent = "✅ 入場可能です！";
+                document.getElementById("codeStatusArea").classList.add("code-success");
+                document.getElementById("participantConfirmCode").disabled = true;
+                stopPolling();
+            } else {
+                document.getElementById("codeStatusArea").textContent = "コードが違います";
+                document.getElementById("codeStatusArea").classList.remove("code-success");
+            }
+        } catch(e) {
+            document.getElementById("codeStatusArea").textContent = "確認エラー";
+            document.getElementById("codeStatusArea").classList.remove("code-success");
+        }
+    }
+
+    // 管理者ログインUI & ダッシュボード
+    function setupAdminHandlers() {
+        const adminBtn = document.getElementById("adminLoginBtn");
+        const modal = document.getElementById("adminLoginModal");
+        const pwInput = document.getElementById("adminPassword");
+        const submit = document.getElementById("adminLoginSubmit");
+        const cancel = document.getElementById("adminLoginCancel");
+        const errorBox = document.getElementById("loginError");
+
+        adminBtn.addEventListener("click", () => {
+            modal.classList.remove("hidden");
+            pwInput.value = "";
+            errorBox.textContent = "";
+            errorBox.classList.add("hidden");
+            pwInput.focus();
+        });
+        submit.addEventListener("click", () => handleLogin());
+        cancel.addEventListener("click", closeModal);
+        pwInput.addEventListener("keydown", e => {
+            if (e.key === "Enter") handleLogin();
+            if (e.key === "Escape") closeModal();
+        });
+        modal.querySelector('.modal-overlay').addEventListener("click", closeModal);
+
+        function handleLogin() {
+            if (pwInput.value === ADMIN_PASSWORD) {
+                adminLoggedIn = true;
+                modal.classList.add("hidden");
+                document.getElementById("adminSection").style.display = "";
+                document.getElementById("registerContainer").style.display = "none";
+                document.getElementById("participantStatusContainer").style.display = "none";
+                loadAdminScan();
+            } else {
+                errorBox.textContent = "パスワードが正しくありません";
+                errorBox.classList.remove("hidden");
+            }
+            pwInput.value = "";
+        }
+        function closeModal() {
+            modal.classList.add("hidden");
+            pwInput.value = "";
+            errorBox.classList.add("hidden");
+        }
+
+        document.getElementById("logoutAdmin").onclick = () => {
+            adminLoggedIn = false;
+            document.getElementById("adminSection").style.display = "none";
+            document.getElementById("registerContainer").style.display = "";
+        };
+    }
+
+    // 管理者: カメラ起動+QRスキャン
+    function loadAdminScan() {
+        document.getElementById("adminResult").innerHTML = "";
+        document.getElementById("scanStatus").innerHTML = "";
+        const startCamBtn = document.getElementById("startCameraScan");
+        const video = document.getElementById("qrVideo");
+        let scanning = false;
+        let codeFound = null;
+
+        startCamBtn.onclick = async () => {
+            if (scanning) return;
+            // カメラ起動
+            video.style.display = 'block';
+            video.setAttribute("playsinline", true);
+
+            camStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            video.srcObject = camStream;
+            video.play();
+
+            scanning = true;
+            document.getElementById("scanStatus").innerHTML = "<span class='wait-msg'>カメラ起動中…QRコードにかざしてください。</span>";
+
+            scanFrame();
+        };
+
+        async function scanFrame() {
+            if (!scanning) return;
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                const canvas = document.createElement("canvas");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                try {
+                    const res = jsQR(imageData.data, imageData.width, imageData.height);
+                    if (res && res.data) {
+                        scanning = false;
+                        video.pause();
+                        video.srcObject.getTracks().forEach(track => track.stop());
+                        codeFound = res.data;
+                        foundQRId(res.data);
+                        return;
+                    }
+                } catch(e){}
+            }
+            requestAnimationFrame(scanFrame);
+        }
+
+        function foundQRId(participantId) {
+            document.getElementById("scanStatus").innerHTML = `<div class='scan-success'>QRコード読取成功</div>`;
+            // Google Sheet 照合して参加者名
+            // 確認コード生成・登録
+            const confirmationCode = ("" + Math.floor(1000 + Math.random() * 9000)).substring(0,4);
+            document.getElementById("adminResult").innerHTML = "<div class='code-area'><div><b>ID:</b> " + participantId + "</div><div style='margin-top:12px'><b>確認コード: </b><span style='font-size:1.4em'>" + confirmationCode + "</span> <button id='copyCodeBtn'>コピー</button></div><div class='hint' style='margin-top:14px'>このコードを参加者に伝えてください。参加者は自分の画面にコードを入力します。</div></div>";
+
+            document.getElementById("copyCodeBtn").addEventListener("click", () => {
+                navigator.clipboard.writeText(confirmationCode);
+                document.getElementById("copyCodeBtn").textContent = "コピー済み";
+                setTimeout(() => {
+                    document.getElementById("copyCodeBtn").textContent = "コピー";
+                }, 1350);
+            });
+
+            // Google Sheets に記録
+            fetch(webAppUrl, {
+                method: "POST",
+                body: JSON.stringify({
+                    action: "recordEntry",
+                    participantId,
+                    confirmationCode
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) {
+                    document.getElementById("adminResult").innerHTML += "<div class='scan-error'>記録エラー</div>";
+                }
+            });
+        }
+    }
+    </script>
+</body>
+</html>
